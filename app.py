@@ -9,7 +9,7 @@ from flask import Flask, jsonify
 
 import datetime as dt
 
-engine = create_engine("sqlite:///Resources/hawaii.sqlite")
+engine = create_engine("sqlite:///Resources/hawaii.sqlite", connect_args={'check_same_thread': False})
 
 Base = automap_base()
 
@@ -77,7 +77,6 @@ def temp():
     return jsonify(temp_info)
 
 @app.route("/api/v1.0/<start>")
-
 def input(start):
     start_date=dt.datetime.strptime(start,'%Y-%m-%d')
     last_year=start_date-dt.timedelta(days=365)
@@ -85,6 +84,7 @@ def input(start):
     result_list=list(np.ravel(result))
     return jsonify(result_list)
 
+@app.route("/api/v1.0/<start>/<end>")
 def input2(start,end):
     start_date=dt.datetime.strptime(start,'%Y-%m-%d')
     end_date=dt.datetime.strptime(end,'%Y-%m-%d')
